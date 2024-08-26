@@ -8,11 +8,145 @@
 <br>
 
 ## Contents
+- [모델 사용법](#모델-사용법)
 - [대회 개요](#대회-개요)
 - [데이터설명](#데이터-설명)
 - [데이터 전처리 및 데이터 분석](#데이터-전처리-및-데이터-분석)
 - [모델 개요](#모델-개요)
 - [평가 결과 및 성능이 오르지 않았던 접근법들](#평가-결과-및-성능이-오르지-않았던-접근법들)
+
+<br>
+
+## 모델 사용법
+
+folder structure은 다음과 같이 설정해주세요. (data, output 확인)
+
+```plaintext
+Korean_CCI_2024/
+├── data/
+│   ├── dev.json
+│   ├── train.json
+│   └── test.json
+├── output/
+│   ├── fold0/
+│   │   ├── checkpoint-2040/
+│   │   │   ├── ...
+│   │   │   ├── ...
+│   │   │   └── ...
+|   ...
+|   ...
+|   ...
+│   ├── fold10/
+│   │   ├── checkpoint-1890/
+│   │   │   ├── ...
+│   │   │   ├── ...
+│   │   │   └── ...
+├── run/
+│   ├── ensemble.py
+│   ├── trainer.py
+│   ├── train.py
+│   └── test.py
+├── src/
+│   ├── data.py
+│   └── utils.py
+├── .gitignore
+└── README.md
+```
+
+<br>
+
+가중치 파일 다운로드 링크입니다. 해당 폴더 안에 있는 폴더들을 전부 output 폴더 안에 넣어주세요.
+https://drive.google.com/drive/folders/1DNsEMTdCbUm8r_5ZIqaMlEgmhqyqVvIN?usp=drive_link
+
+<hr>
+
+추가로 data같은 경우는 모두의 말뭉치 사이트에서 다운로드받으셔야 합니다.
+
+<br>
+
+실행방법은 다음과 같습니다.
+train.py와 test.py 2번째 줄에서 sys.append부분이 있는데 이 부분을 해당 명령어를 실행하는 위치의 절대경로로 설정해주세요.     
+(지웠을 때 오류가 나지 않는다면 상관없음)
+```plaintext
+python src/train.py\
+    --model_id kihoonlee/STOCK_SOLAR-10.7B\
+    --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
+    --fold_mode False\
+    --fold_num 10\
+    --fold_idx 0\
+    --batch_size 1\
+    --gradient_accumulation_steps 4\
+    --warmup_steps=-2\
+    --lr 0.00005\
+    --epoch 10\
+    --weight_decay 0.1\
+    --seed 42\
+    --tokenizer_parallel True\
+    --change_name True\
+    --quant_allow False\
+    --quant_4bit False\
+    --quant_4bit_double False\
+    --quant_4bit_compute_dtype bfloat16\
+    --quant_8bit False\
+    --model_dtype bfloat16\
+    --lora_rank 16\
+    --lora_alpha 32\
+    --lora_dropout 0\
+    --lora_bias none\
+    --train_path ./data/train.json\
+    --dev_path ./data/dev.json\
+    --save_dir output/fold0
+```
+필수로 바꾸셔야 할 파라미터는 `save_dir`입니다.
+
+<br>
+
+inference 방법은 다음과 같습니다.
+```plaintext
+python src/train.py\
+   --output output/fold0.json\
+    --model_id kihoonlee/STOCK_SOLAR-10.7B\
+    --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
+    --device cuda\
+    --device_number 1\
+    --peft_model_dir ./test_git/checkpoint-2040\
+    --test_dir data/test.json
+```
+필수로 바꾸셔야 할 파라미터는 `peft_model_dir`, `device_number`, `output`입니다.
+
+<br>
+
+앙상블 방법은 다음과 같습니다.
+```plaintext
+python src/ensemble.py\
+      --dir output\
+      --d0 fold0.json\
+      --d1 fold1.json\
+      --d2 fold2.json\
+      --d3 fold3.json\
+      --d4 fold4.json\
+      --d5 fold5.json\
+      --d6 fold6.json\
+      --d7 fold7.json\
+      --d8 fold8.json\
+      --d9 fold9.json\
+      --d10 fold10.json\
+      --save_dir ensemble.json
+```
+파라미터를 전부 바꾸셔야 합니다.
+
+<br>
+
+재현 방법은 다음과 같습니다.
+```
+./train.sh
+./test.sh
+```
+(필자 환경이 window라서 잘 작동되는지는 모르겠음..)
+
+재현 방법의 과정은 다음과 같습니다.
+1. 10fold를 학습 + 기존 train, dev로 학습(fold_mode로 조정하시면 됩니다.)
+2. 11개의 모델 각각을 inference하고 나온 json파일들을 ensemble.py를 통해 hard voting ensemble하면 됩니다.
 
 <br>
 
