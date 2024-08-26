@@ -1,10 +1,20 @@
+# Korean_CCI_2024
+
 ## 대회 개요
 
 #### 2023 국립국어원 인공지능의 한국어 능력 평가 대화 맥락 추론 부문
-![poster]("./src/img.jpeg")
+<img src="src/img.jpeg">
 
+<br>
 
+## Contents
+- [대회 개요](#대회-개요)
+- [데이터설명](#데이터-설명)
+- [데이터 전처리 및 데이터 분석](#데이터-전처리-및-데이터-분석)
+- [모델 개요](#모델-개요)
+- [평가 결과 및 성능이 오르지 않았던 접근법들](#평가-결과-및-성능이-오르지-않았던-접근법들)
 
+<br>
 
 ## 데이터 설명
 
@@ -45,6 +55,8 @@ category는 총 5가지로 다음과 같다.
 <br>
 
 대화문, 대상 발화, 그리고 추론문의 유형을 종합적으로 고려하여 주어진 세 가지 추론문 후보 중 대상 발화의 추론 유형에 가장 적합한 하나를 선택하는 모델을 만들어야 한다.
+
+<br>
 
 ## 데이터 전처리 및 데이터 분석
 
@@ -153,8 +165,6 @@ train, develop의 inference1, inference2, inference3의 개수는 다음과 같�
 3. lm_head에서 나온 Output에서 'A', 'B', 'C'에 해당하는 위치의 logit만 가져온다.
 4. label과 logit의 loss를 CrossEntropyLoss를 통해 구한다.
 5. adamw_hf를 통해 lora layers의 파라미터를 학습시킨다.
-   
-
 
 <br>
 
@@ -173,5 +183,12 @@ train, develop의 inference1, inference2, inference3의 개수는 다음과 같�
 
 ## 평가 결과 및 성능이 오르지 않았던 접근법들
 
+fold별 test data의 최소 성능은 95 이상이었다.
+하지만 앞에서 말했듯이 bias는 낮지만 variance가 높은 문제가 있었다.
+variance가 높은 문제를 해결하기 위해 11개의 모델을 ensemble했고 최종적으로 test data의 성능이 97로 올랐다.
 
-
+모델 개선 방안
+1. 더 많은 모델들을 학습해 앙상블
+2. 10.7B보다 파라미터의 수가 더 많은 model을 선택
+3. lora 대신 전체 모델을 full fine-tuning
+4. Prompt 개선
