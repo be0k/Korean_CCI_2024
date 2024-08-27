@@ -1,0 +1,12 @@
+python==3.12.3
+pytorch==2.3.1+cu121
+pandas==2.2.2
+json
+argparse
+tqdm==4.66.4
+numpy==1.26.4
+transformers==4.44.0
+peft==0.12.0
+datasets==2.19.1
+trl==0.9.6
+scikit-learn==1.5.0
