@@ -9,6 +9,7 @@
 
 ## Contents
 - [모델 사용법](#모델-사용법)
+- [최종 Inference방법](#최종-Inference과정)
 - [대회 개요](#대회-개요)
 - [데이터설명](#데이터-설명)
 - [데이터 전처리 및 데이터 분석](#데이터-전처리-및-데이터-분석)
@@ -108,11 +109,10 @@ python src/train.py\
     --model_id kihoonlee/STOCK_SOLAR-10.7B\
     --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
     --device cuda\
-    --device_number 1\
     --peft_model_dir ./test_git/checkpoint-2040\
     --test_dir data/test.json
 ```
-필수로 바꾸셔야 할 파라미터는 `peft_model_dir`, `device_number`, `output`입니다.
+필수로 바꾸셔야 할 파라미터는 `peft_model_dir`, `output`입니다.
 
 <br>
 
@@ -137,16 +137,13 @@ python src/ensemble.py\
 
 <br>
 
-재현 방법은 다음과 같습니다.
-```
-./train.sh
-./test.sh
-```
-(필자 환경이 window라서 잘 작동되는지는 모르겠음..)
-
-재현 방법의 과정은 다음과 같습니다.
-1. 10fold를 학습 + 기존 train, dev로 학습(fold_mode로 조정하시면 됩니다.)
-2. 11개의 모델 각각을 inference하고 나온 json파일들을 ensemble.py를 통해 hard voting ensemble하면 됩니다.
+### 최종 Inference과정
+1. python=3.12.3으로 환경을 만들고 `pip install -r requirements.txt`명령어를 실행한다.
+2. 모두의 말뭉치에서 데이터를 다운받고 json파일의 이름을 `train.json`, `test.json`, `dev.json`으로 수정한 후 data폴더에 넣는다.
+3. 위에 있는 Google Drive링크에 들어가서 가중치 파일들을 다운받고 11개의 파일(fold0, fold1, ..., fold10)을 output폴더에 넣는다.
+4. 각 모델의 가중치별로 `test.py`를 실행한다.(이 부분은 test.sh로 만들어져 있으나 필자가 Window환경이라서 잘 작동이 되는지는 모르겠음.)
+5. `test.py`를 실행할 때 설정한 output파라미터에 실행 결과가 저장되고 이 파일 경로들을 `ensemble.py`를 실행할 때 파라미터에 입력한다.
+6. `save_dir` 파라미터에 입력한 json파일을 제출한다.
 
 <br>
 
@@ -160,7 +157,7 @@ python src/ensemble.py\
 
 <br>
 
-데이터의 구조는 다음과 같다
+데이터의 구조는 다음과 같다.
 ```plaintext
 ┌id
 │input
@@ -175,6 +172,46 @@ python src/ensemble.py\
 └── inference_3
 └output
 ```
+
+<br>
+
+다음은 데이터의 예시이다.
+```plaintext
+{
+    "id": "nikluge-2024-대화 맥락 추론-train-000001",
+    "input": {
+        "conversation": [
+            {
+                "speaker": 2,
+                "utterance": "진짜 신의 한수",
+                "utterance_id": "MDRW2100003410.1.1"
+            },
+            {
+                "speaker": 1,
+                "utterance": "이사하자마자 비 많이 와서 베란다 물 많이 새는 거 알았잖아",
+                "utterance_id": "MDRW2100003410.1.2"
+            },
+            {
+                "speaker": 2,
+                "utterance": "글치 계속 해떴으면 몰랐겠지",
+                "utterance_id": "MDRW2100003410.1.3"
+            },
+            ...
+            ...
+            ...
+        ],
+        "reference_id": [
+            "MDRW2100003410.1.11"
+        ],
+        "category": "원인",
+        "inference_1": "화자2가 사는 곳 근처에서 베란다 보수 공사가 진행되고 있다.",
+        "inference_2": "화자2가 사는 곳 근처에서 싱크홀 보수 공사가 진행되고 있다.",
+        "inference_3": "화자2가 사는 곳 근처에서 싱크홀 보수 공사가 중단되었다."
+    },
+    "output": "inference_2" # The Correct answer is inference_2
+}
+```
+
 <br>
 
 category는 총 5가지로 다음과 같다.
