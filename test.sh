@@ -11,7 +11,6 @@ do
     --model_id kihoonlee/STOCK_SOLAR-10.7B\
     --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
     --device cuda\
-    --device_number 1\
     --peft_model_dir ./test_git/checkpoint-$param\
     --test_dir data/test.json
 done
