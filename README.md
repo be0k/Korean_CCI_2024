@@ -99,65 +99,78 @@ https://drive.google.com/drive/folders/1DNsEMTdCbUm8r_5ZIqaMlEgmhqyqVvIN?usp=dri
 실행방법은 다음과 같습니다.
 
 ```plaintext
-python -m src.train\
-    --model_id kihoonlee/STOCK_SOLAR-10.7B\
-    --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
+python -m src.train \
+    --model_id kihoonlee/STOCK_SOLAR-10.7B \
+    --tokenizer kihoonlee/STOCK_SOLAR-10.7B \
     --fold_mode \
-    --fold_num 10\
-    --fold_idx 0\
-    --batch_size 1\
-    --gradient_accumulation_steps 4\
-    --warmup_steps=-2\
-    --lr 0.00005\
-    --epoch 10\
-    --weight_decay 0.1\
-    --seed 42\
-    --quant_4bit_compute_dtype bfloat16\
-    --model_dtype bfloat16\
-    --lora_rank 16\
-    --lora_alpha 32\
-    --lora_dropout 0\
-    --lora_bias none\
-    --train_path ./data/train.json\
-    --dev_path ./data/dev.json\
+    --fold_num 10 \
+    --fold_idx 0 \
+    --batch_size  1 \
+    --gradient_accumulation_steps 4 \
+    --warmup_steps=-2 \
+    --lr 0.00005 \
+    --epoch 10 \
+    --weight_decay 0.1 \
+    --seed 42 \
+    --quant_4bit_compute_dtype bfloat16 \
+    --model_dtype bfloat16 \
+    --lora_rank 16 \
+    --lora_alpha 32 \
+    --lora_dropout 0 \
+    --lora_bias none \
+    --train_path ./data/train.json \
+    --dev_path ./data/dev.json \
     --save_dir output/fold0
 ```
-필수로 바꾸셔야 할 파라미터는 `save_dir`입니다.
+필수로 바꾸셔야 할 파라미터는 `save_dir`입니다.    
+오류가 나면 아래 코드를 사용하세요.
+```
+python -m run.train --model_id kihoonlee/STOCK_SOLAR-10.7B --tokenizer kihoonlee/STOCK_SOLAR-10.7B --fold_mode --fold_num 10 --fold_idx 0 --batch_size 1 --gradient_accumulation_steps 4 --warmup_steps=-2 --lr 0.00005 --epoch 10 --weight_decay 0.1 --seed 42 --quant_4bit_compute_dtype bfloat16 --model_dtype bfloat16 --lora_rank 16 --lora_alpha 32 --lora_dropout 0 --lora_bias none --train_path ./data/train.json --dev_path ./data/dev.json --save_dir output/fold0
+
+```
 
 <br>
 
 inference 방법은 다음과 같습니다.
 ```plaintext
-python -m src.test\
-   --output output/fold0.json\
-    --model_id kihoonlee/STOCK_SOLAR-10.7B\
-    --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
-    --device cuda\
-    --peft_model_dir ./test_git/checkpoint-2040\
+python -m run.test \
+   --output output/fold0.json \
+    --model_id kihoonlee/STOCK_SOLAR-10.7B \
+    --tokenizer kihoonlee/STOCK_SOLAR-10.7B \
+    --device cuda \
+    --peft_model_dir ./output/fold0/checkpoint-2040 \
     --test_dir data/test.json
 ```
-필수로 바꾸셔야 할 파라미터는 `peft_model_dir`, `output`입니다.
+필수로 바꾸셔야 할 파라미터는 `peft_model_dir`, `output`입니다.    
+오류가 나면 아래 코드를 사용하세요.
+```
+python -m run.test --output output/fold0.json --model_id kihoonlee/STOCK_SOLAR-10.7B --tokenizer kihoonlee/STOCK_SOLAR-10.7B --device cuda --peft_model_dir ./output/fold0/checkpoint-2040 --test_dir data/test.json
+```
 
 <br>
 
 앙상블 방법은 다음과 같습니다.
 ```plaintext
-python -m src.ensemble\
-      --dir output\
-      --d0 fold0.json\
-      --d1 fold1.json\
-      --d2 fold2.json\
-      --d3 fold3.json\
-      --d4 fold4.json\
-      --d5 fold5.json\
-      --d6 fold6.json\
-      --d7 fold7.json\
-      --d8 fold8.json\
-      --d9 fold9.json\
-      --d10 fold10.json\
+python -m run.ensemble \
+      --dir output \
+      --d0 fold0.json \
+      --d1 fold1.json \
+      --d2 fold2.json \
+      --d3 fold3.json \
+      --d4 fold4.json \
+      --d5 fold5.json \
+      --d6 fold6.json \
+      --d7 fold7.json \
+      --d8 fold8.json \
+      --d9 fold9.json \
+      --d10 fold10.json \
       --save_dir ensemble.json
 ```
-파라미터를 전부 바꾸셔야 합니다.
+파라미터를 전부 바꾸셔야 합니다.   
+오류가 나면 아래 코드를 사용하세요.
+```
+python -m run.ensemble --dir output --d0 fold0.json --d1 fold1.json --d2 fold2.json --d3 fold3.json --d4 fold4.json --d5 fold5.json --d6 fold6.json --d7 fold7.json --d8 fold8.json --d9 fold9.json --d10 fold10.json --save_dir ensemble.json
+```
 
 <br>
 
