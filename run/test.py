@@ -1,6 +1,3 @@
-import sys
-sys.path.append('C:\\Users\\Gachon\\Desktop\\jy_main\\kor_git')
-
 from src.data import TestDataset
 import argparse
 import json
