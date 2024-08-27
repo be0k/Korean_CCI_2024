@@ -65,9 +65,39 @@ https://drive.google.com/drive/folders/1DNsEMTdCbUm8r_5ZIqaMlEgmhqyqVvIN?usp=dri
 
 <br>
 
+파라미터 설명
+|name|description|
+|---|--------|
+|model_id|모델 이름|
+|tokenizer|tokenizer 이름|
+|fold_mode|이 파라미터를 설정하면 fold_mode가 활성화됩니다.(명령어에 입력 안하면 기존 train.json이 train data가 되고 dev.json이 dev data가 됩니다.)|
+|fold_num|fold_mode를 활성화 시켰을 때 k-fold에서 k의 number입니다.|
+|fold_idx|k개의 number가 있고 0~k-1 사이의 수를 선택하셔야 합니다.|
+|batch_size|batch size입니다.|
+|gradient_accumulation_steps|gradient_accumulation_steps입니다.|
+|warmup_steps|warmup_steps입니다. 음수인 경우 1epoch이 warmup_steps로 지정됩니다.|
+|lr|learning rate입니다.|
+|epoch|epoch입니다.|
+|weight_decay|weight decay입니다.|
+|seed|seed입니다.|
+|qunat_4bit_compute_dtype|4bit 양자화 할 때 data type입니다. 기본값은 torch.bfloat16입니다.|
+|model_dtype|모델의 data type입니다. 기본값은 torch.bfloat16입니다.|
+|lora_rank|lora의 rank 수 입니다.|
+|lora_alpha|lora의 alpha값입니다.|
+|lora_dropout|lora의 drop out값입니다.|
+|lora_bias|lora의 bias 종류입니다. 기본값은 none입니다.|
+|train_path|train.json의 파일위치를 적으셔야 합니다.|
+|dev_path|dev.json의 파일위치를 적으셔야 합니다.|
+|save_dir|모델의 가중치 저장 위치입니다.|
+|tokenizer_parallel|tokenizer를 병렬화할 것인지 정하는 파라미터입니다. 기본값은 True이며 False를 원하면 `--tokenizer_parallel`을 쓰시면 됩니다.|
+|change_name|대화에서 `name`을 `화자`로 바꿀 것인지 정하는 파라미터입니다. 기본값은 True이며 False를 원하면 `--change_name`을 쓰시면 됩니다.|
+|quant_allow|모델의 양자화를 해야하는지의 유무입니다. 기본값은 False이며 양자화를 원하면 `--quant_allow`를 쓰시면 됩니다.|
+|quant_4bit|모델이 4bit양자화를 해야하는지의 파라미터 입니다. 기본값은 False이며 4bit양자화를 원하면 위의 파라미터를 쓰시고 `--quant_4bit`를 쓰시면 됩니다.|
+|quant_4bit_double|모델이 4bit double양자화를 해야하는지의 파라미터 입니다. 기본값은 False이며 double양자화를 원하면 `--quant_4bit_double`을 쓰시면 됩니다.|
+|quant_8bit|모델이 8bit양자화를 해야하는지의 파라미터 입니다. 기본값은 False이며 8bit양자화를 원하면 `--quant_8bit`를 쓰시면 됩니다.|
+
 실행방법은 다음과 같습니다.
-train.py와 test.py 2번째 줄에서 sys.append부분이 있는데 이 부분을 해당 명령어를 실행하는 위치의 절대경로로 설정해주세요.     
-(지웠을 때 오류가 나지 않는다면 상관없음)
+
 ```plaintext
 python src/train.py\
     --model_id kihoonlee/STOCK_SOLAR-10.7B\
