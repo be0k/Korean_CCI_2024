@@ -40,12 +40,8 @@ def merge_data(path1, path2):
     for i in json_data1:
         merged_data.append(i)
 
-    print(len(merged_data))
-
     for i in json_data2:
         merged_data.append(i)
-
-    print(len(merged_data))
 
     directory_path = get_directory_path(path1)
     with open(os.path.join(directory_path, 'merge.json'), "w", encoding="utf-8") as f:

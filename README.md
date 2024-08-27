@@ -72,7 +72,7 @@ train.py와 test.py 2번째 줄에서 sys.append부분이 있는데 이 부분�
 python src/train.py\
     --model_id kihoonlee/STOCK_SOLAR-10.7B\
     --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
-    --fold_mode False\
+    --fold_mode \
     --fold_num 10\
     --fold_idx 0\
     --batch_size 1\
@@ -82,13 +82,7 @@ python src/train.py\
     --epoch 10\
     --weight_decay 0.1\
     --seed 42\
-    --tokenizer_parallel True\
-    --change_name True\
-    --quant_allow False\
-    --quant_4bit False\
-    --quant_4bit_double False\
     --quant_4bit_compute_dtype bfloat16\
-    --quant_8bit False\
     --model_dtype bfloat16\
     --lora_rank 16\
     --lora_alpha 32\

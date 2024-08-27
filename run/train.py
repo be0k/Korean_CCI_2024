@@ -1,3 +1,14 @@
+import os
+import sys
+
+# get the project path dynamically to avoid hardcoded path
+project_path = os.path.abspath(os.path.join('.'))
+
+# check the path is not already in sys.path, to avoid duplicates
+if project_path not in sys.path:
+    sys.path.insert(0, project_path)
+
+
 from src.data import TrainDataset, DevDataset, DataCollatorForSupervisedDataset
 from run.trainer import Llama3ForSFT
 from src.utils import CustomMetrics, merge_data, get_directory_path
@@ -21,7 +32,7 @@ parser = argparse.ArgumentParser(prog="train", description="Training about Conve
 g = parser.add_argument_group("Common Parameter")
 g.add_argument("--model_id", type=str, default='kihoonlee/STOCK_SOLAR-10.7B',  help="model file path")
 g.add_argument("--tokenizer", type=str, default='kihoonlee/STOCK_SOLAR-10.7B', help="huggingface tokenizer path")
-g.add_argument("--fold_mode", type=bool, default=True, help="k-fold mode")
+g.add_argument("--fold_mode", action='store_true', help="k-fold mode")
 g.add_argument("--fold_num", type=int, default=10, help="fold number (k)")
 g.add_argument("--fold_idx", type=int, default=0, help="fold index (0 ~ k-1)")
 
@@ -34,13 +45,13 @@ g.add_argument("--epoch", type=int, default=10, help="training epoch")
 g.add_argument("--weight_decay", type=float, default=0.1, help="weight_decay")
 g.add_argument("--seed", type=int, default=42, help="seed")
 
-g.add_argument("--tokenizer_parallel", type=bool, default=True, help="set True if you want tokenizers_parrallelism")#
-g.add_argument("--change_name", type=bool, default=True, help="change \"name\" to \"화자\" if True")
-g.add_argument("--quant_allow", type=bool, default=False, help="Must be set to True for quantization.")
-g.add_argument("--quant_4bit", type=bool, default=False, help="4bit quantization (load_in_4bit)")
-g.add_argument("--quant_4bit_double", type=bool, default=False, help="4bit double quantization (bnb_4bit_use_double_quant)")
+g.add_argument("--tokenizer_parallel", action='store_false', help="set True if you want tokenizers_parrallelism")#
+g.add_argument("--change_name", action='store_false', help="change \"name\" to \"화자\" if True")
+g.add_argument("--quant_allow", action='store_true', help="Must be set to True for quantization.")
+g.add_argument("--quant_4bit", action='store_true', help="4bit quantization (load_in_4bit)")
+g.add_argument("--quant_4bit_double", action='store_true', help="4bit double quantization (bnb_4bit_use_double_quant)")
 g.add_argument("--quant_4bit_compute_dtype", type=str, default='bfloat16', help="bnb_4bit_quant_type(float32, bfloat16, float16)")
-g.add_argument("--quant_8bit", type=bool, default=False, help="8bit quantization (load_in_8bit)")
+g.add_argument("--quant_8bit", action='store_true', help="8bit quantization (load_in_8bit)")
 g.add_argument("--model_dtype", type=str, default="bfloat16", help="model dtype (torch_dtype)")
 
 #lora parameters
@@ -56,8 +67,8 @@ g.add_argument("--save_dir", type=str, default="test_git", help="model save path
 
 
 
-
 def main(args):
+    print(args)
     #tokenizers parallelism
     if args.tokenizer_parallel:
         os.environ['TOKENIZERS_PARALLELISM'] = 'true'
