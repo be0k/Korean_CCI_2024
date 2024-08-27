@@ -99,7 +99,7 @@ https://drive.google.com/drive/folders/1DNsEMTdCbUm8r_5ZIqaMlEgmhqyqVvIN?usp=dri
 실행방법은 다음과 같습니다.
 
 ```plaintext
-python src/train.py\
+python -m src.train\
     --model_id kihoonlee/STOCK_SOLAR-10.7B\
     --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
     --fold_mode \
@@ -128,7 +128,7 @@ python src/train.py\
 
 inference 방법은 다음과 같습니다.
 ```plaintext
-python src/train.py\
+python -m src.test\
    --output output/fold0.json\
     --model_id kihoonlee/STOCK_SOLAR-10.7B\
     --tokenizer kihoonlee/STOCK_SOLAR-10.7B\
@@ -142,7 +142,7 @@ python src/train.py\
 
 앙상블 방법은 다음과 같습니다.
 ```plaintext
-python src/ensemble.py\
+python -m src.ensemble\
       --dir output\
       --d0 fold0.json\
       --d1 fold1.json\
