@@ -20,7 +20,6 @@ g.add_argument("--output",type=str, default=f'quan8_auto.json',  help="output fi
 g.add_argument("--model_id", type=str, default='kihoonlee/STOCK_SOLAR-10.7B', help="huggingface model id")
 g.add_argument("--tokenizer", type=str, help="huggingface tokenizer")
 g.add_argument("--device", type=str, default='cuda', help="device to load the model")
-g.add_argument("--device_number", type=int, default=1,help="device number(if < 0, not select)")
 g.add_argument("--peft_model_dir", type=str, default="./test_git/checkpoint-614",help="peft_model_dir")
 g.add_argument("--test_dir", type=str, default="data/test.json", help="test dir path")
 
@@ -28,9 +27,6 @@ g.add_argument("--test_dir", type=str, default="data/test.json", help="test dir 
 
 
 def main(args):
-    if args.device_number >= 0:
-        os.environ["CUDA_VISIBLE_DEVICES"]= str(args.device_number)
-    
     #model
     bnb_config = BitsAndBytesConfig(
         load_in_8bit=True,
