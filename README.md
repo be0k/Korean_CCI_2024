@@ -99,7 +99,7 @@ https://drive.google.com/drive/folders/1DNsEMTdCbUm8r_5ZIqaMlEgmhqyqVvIN?usp=dri
 실행방법은 다음과 같습니다.
 
 ```plaintext
-python -m src.train \
+python -m run.train \
     --model_id kihoonlee/STOCK_SOLAR-10.7B \
     --tokenizer kihoonlee/STOCK_SOLAR-10.7B \
     --fold_mode \
