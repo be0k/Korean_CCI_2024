@@ -407,3 +407,12 @@ variance가 높은 문제를 해결하기 위해 11개의 모델을 ensemble했�
 2. 10.7B보다 파라미터의 수가 더 많은 model을 선택
 3. lora 대신 전체 모델을 full fine-tuning
 4. Prompt 개선
+
+<br>
+
+## ref
+대화 맥락 추론(가 유형) : https://kli.korean.go.kr/benchmark/taskOrdtm/taskList.do?taskOrdtmId=144&clCd=END_TASK&subMenuId=sub01
+
+대화 맥락 추론(나 유형) : https://kli.korean.go.kr/taskOrdtm/taskList.do?taskOrdtmId=145&clCd=END_TASK&subMenuId=sub01
+
+kihoonlee/STOCK_SOLAR-10.7B : https://huggingface.co/kihoonlee/STOCK_SOLAR-10.7B
