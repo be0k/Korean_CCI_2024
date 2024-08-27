@@ -1,6 +1,3 @@
-import sys
-sys.path.append('C:\\Users\\Gachon\\Desktop\\jy_main\\kor_git')
-
 from src.data import TrainDataset, DevDataset, DataCollatorForSupervisedDataset
 from run.trainer import Llama3ForSFT
 from src.utils import CustomMetrics, merge_data, get_directory_path
