@@ -1,6 +1,6 @@
 for i in {0..9}
 do
-    python src/train.py \
+    python -m run.train \
     --model_id kihoonlee/STOCK_SOLAR-10.7B \
     --tokenizer kihoonlee/STOCK_SOLAR-10.7B \
     --fold_mode \
@@ -24,7 +24,7 @@ do
     --save_dir output/fold$i
 done
 
-python src/train.py \
+python -m run.train \
     --model_id kihoonlee/STOCK_SOLAR-10.7B \
     --tokenizer kihoonlee/STOCK_SOLAR-10.7B \
     --fold_mode \
