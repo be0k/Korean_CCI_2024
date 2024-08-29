@@ -1,0 +1,1 @@
+python -m run.test --output output/fold7.json --model_id kihoonlee/STOCK_SOLAR-10.7B --tokenizer kihoonlee/STOCK_SOLAR-10.7B --device cuda --peft_model_dir ./output/fold7/checkpoint-2040 --test_dir data/test.json
